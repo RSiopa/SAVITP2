@@ -25,7 +25,8 @@ def main():
 
     resume_training = False
     model_path = 'model.pkl'
-    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    device = 'cpu' if torch.cuda.is_available() else 'cuda:0'
 
     model = Model()
     model.to(device)
@@ -62,16 +63,16 @@ def main():
             # print(image_filenames)
 
     # print(len(image_filenames))  # 207920 images
-    image_filenames = random.sample(image_filenames, k=199)
+    image_filenames = random.sample(image_filenames, k=1000)
     # print(image_filenames)
 
     train_image_filenames, test_image_filenames = train_test_split(image_filenames, test_size=0.2)
 
     dataset_train = Dataset(train_image_filenames)
-    loader_train = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=10, shuffle=True)
+    loader_train = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=256, shuffle=True)
 
     dataset_test = Dataset(test_image_filenames)
-    loader_test = torch.utils.data.DataLoader(dataset=dataset_test, batch_size=10, shuffle=True)
+    loader_test = torch.utils.data.DataLoader(dataset=dataset_test, batch_size=256, shuffle=True)
 
     tensor_to_pil_image = transforms.ToPILImage()
 
@@ -112,8 +113,9 @@ def main():
 
             # get output from the model, given the inputs
             label_t_predicted = model.forward(image_t)
-            print(label_t)
-            print(label_t_predicted)
+            # print(image_t)
+            # print(label_t)
+            # print(label_t_predicted)
 
             # get loss for the predicted output
             loss = loss_function(label_t_predicted, label_t)
