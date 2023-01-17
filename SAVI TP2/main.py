@@ -25,8 +25,7 @@ def main():
 
     resume_training = False
     model_path = 'model.pkl'
-    # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    device = 'cpu' if torch.cuda.is_available() else 'cuda:0'
+    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
     model = Model()
     model.to(device)
