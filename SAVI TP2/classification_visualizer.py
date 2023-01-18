@@ -147,15 +147,15 @@ class ClassificationVisualizer:
             max_probability_item = 'None'
             max_probability_idx = 0
 
-            print(len(output_probability_list))
+            # print(len(output_probability_list))
 
             for output_idx, output in enumerate(output_probability_list):
                 if output_probability_list[output] > max_probability:
                     max_probability = output_probability_list[output]
                     max_probability_item = output
                     max_probability_idx = output_idx
-                    print(output)
-                    print(output_idx)
+                    # print(output)
+                    # print(output_idx)
 
             # is_apple = True if output_probability_apple > 0.5 else False,
             success = True if (label.data.item() == max_probability_idx) else False

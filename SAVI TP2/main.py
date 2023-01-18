@@ -96,7 +96,7 @@ def main():
         idx_epoch = checkpoint['epoch']
         epoch_train_losses = checkpoint['train_losses']
         epoch_test_losses = checkpoint['test_losses']
-
+        
         # model.train()
     else:
         idx_epoch = 0
