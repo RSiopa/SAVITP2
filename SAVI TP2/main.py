@@ -2,7 +2,7 @@
 
 import random
 from statistics import mean
-
+import cv2
 from colorama import Fore, Style
 from sklearn.model_selection import train_test_split
 from torchvision.transforms import transforms
@@ -15,6 +15,7 @@ from data_visualizer import DataVisualizer
 from model import Model
 from dataset import Dataset
 import glob
+import numpy as np
 
 
 def main():
@@ -45,6 +46,7 @@ def main():
 
     # Get all the images from the dataset
     image_filenames = []
+    mask_filenames = []
     dir_list = os.listdir(dataset_path)
     for dirs in dir_list:
         subdir_list = os.listdir(dataset_path + '/' + dirs)
@@ -54,24 +56,26 @@ def main():
             # print(file_list)
             for file in file_list:
                 # print(file)
-                if file.endswith('_crop.png'):
+                if file.endswith('_crop.png') and os.path.isfile((dataset_path + '/' + dirs + '/' + subdirs + '/' + file).replace("_crop.png", "_maskcrop.png")):
                     image_filenames.append(dataset_path + '/' + dirs + '/' + subdirs + '/' + file)
                     # print(image_filenames)
                     # print(dataset_path + '/' + dirs + '/' + subdirs + '/' + file)
             # print(len(image_filenames))
             # print(image_filenames)
 
+    # mask_filenames = image_filenames.replace("_crop.png", "_maskcrop.png")
+
     # print(len(image_filenames))  # 207920 images
-    image_filenames = random.sample(image_filenames, k=1000)
+    image_filenames = random.sample(image_filenames, k=10000)
     # print(image_filenames)
 
     train_image_filenames, test_image_filenames = train_test_split(image_filenames, test_size=0.2)
 
     dataset_train = Dataset(train_image_filenames)
-    loader_train = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=256, shuffle=True)
+    loader_train = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=500, shuffle=True)
 
     dataset_test = Dataset(test_image_filenames)
-    loader_test = torch.utils.data.DataLoader(dataset=dataset_test, batch_size=256, shuffle=True)
+    loader_test = torch.utils.data.DataLoader(dataset=dataset_test, batch_size=500, shuffle=True)
 
     tensor_to_pil_image = transforms.ToPILImage()
 

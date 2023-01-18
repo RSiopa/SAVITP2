@@ -172,7 +172,7 @@ class ClassificationVisualizer:
 
             color = 'green' if success else 'red'
             title = max_probability_item
-            title += ' ' + str(image_idx)
+            title += ' ' + str(round(max_probability*100, 1)) + '%'
             ax.set_xlabel(title, color=color)
 
         plt.draw()

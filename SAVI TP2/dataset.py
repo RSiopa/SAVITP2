@@ -1,7 +1,8 @@
 import torch
-from PIL import Image
+from PIL import Image, ImageChops, ImageOps
 from torchvision.transforms import transforms
 import numpy as np
+import cv2
 
 
 class Dataset(torch.utils.data.Dataset):
@@ -27,9 +28,45 @@ class Dataset(torch.utils.data.Dataset):
         # Get the image
         image_pil = Image.open(self.image_filenames[index])
 
-        image_t = self.transforms(image_pil)
+        # print(self.image_filenames[index])
 
-        return image_t, self.labels[index]
+        mask_pil = ImageOps.invert(Image.open(self.image_filenames[index].replace("_crop.png", "_maskcrop.png")).convert('RGB')).convert('1')
+
+        # black_pil = Image.open(self.image_filenames[index].replace("_crop.png", "_depthcrop.png"))
+
+        white_pil = Image.new(mode="RGB", size=image_pil.size, color=(255, 255, 255))
+
+        # image_pil.convert("RGBA")
+
+        # image_pil.show()
+        # input("Press Enter to continue...")
+        # mask_pil.show()
+        # input("Press Enter to continue...")
+
+        # image_t = self.transforms(image_pil)
+        # masks_t = self.transforms(mask_pil)
+
+        # image_t.show()
+        # input("Press Enter to continue...")
+        # masks_t.show()
+        # input("Press Enter to continue...")
+        
+        # masked_image_pil = ImageChops.logical_and(image_pil, mask_pil)
+
+        # masked_image_t.show()
+        # input("Press Enter to continue...")
+
+        # masked_image_t[[masks_t, masks_t, masks_t]==0] = 255
+
+        # masked_image_t.show()
+        # input("Press Enter to continue...")
+
+        masked_image = Image.composite(white_pil, image_pil, mask_pil)
+        # masked_image_t = self.transforms(masked_image_pil)
+
+        masked_image_t = self.transforms(masked_image)
+
+        return masked_image_t, self.labels[index]
 
     def __len__(self):  # Return the length of the dataset
         return self.num_images
