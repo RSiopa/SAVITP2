@@ -57,7 +57,7 @@ def main():
     # Initialization
     # ------------------------------------------
     p = PointCloudProcessing()
-    p.loadPointCloud('/home/emanuel/Desktop/Segmentação de objetos numa cena/CENAS/rgbd-scenes-v2_pc/rgbd-scenes-v2/pc/14.ply')
+    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/14.ply')
 
     # ------------------------------------------
     # Execution
@@ -134,7 +134,7 @@ def main():
 # as the cereal box and assigns it to cereal_box_object_idx variable. Then it prints the index of the cereal box.
 
 # This code is useful for aligning a 3D model with a point cloud and finding the best fit for a specific object in the point cloud.
-    cereal_box_model = o3d.io.read_point_cloud('/home/emanuel/Desktop/PTFinal/savi_22-23-main/Parte10/data/cereal_box_2_2_40.pcd')
+    cereal_box_model = o3d.io.read_point_cloud('cereal_box_2_2_40.pcd')
 
     for object_idx, object in enumerate(objects):
         print("Apply point-to-point ICP to object " + str(object['idx']) )
@@ -159,9 +159,11 @@ def main():
             cereal_box_object_idx = object_idx
 
     print('The cereal box is object ' + str(cereal_box_object_idx))
+
     # ------------------------------------------
     # Visualization
     # ------------------------------------------
+
     # Create a list of entities to draw
     p.inliers.paint_uniform_color([0,1,1]) # paints the plane in red
     entities = []
