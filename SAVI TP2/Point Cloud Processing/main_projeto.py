@@ -19,24 +19,24 @@ from matplotlib import cm
 from more_itertools import locate
 
 view = {
-	"class_name" : "ViewTrajectory",
-	"interval" : 29,
-	"is_loop" : False,
-	"trajectory" : 
-	[
-		{
-			"boundingbox_max" : [ 3.0000000000000004, 3.0000000000000004, 3.83980393409729 ],
-			"boundingbox_min" : [ -2.5246021747589111, -1.5300980806350708, -1.4928504228591919 ],
-			"field_of_view" : 60.0,
-			"front" : [ 0.67118682276199615, -0.70042708582828483, -0.24271412482332699 ],
-			"lookat" : [ 0.11570111840900868, -0.033346828483835626, 1.7983664180669476 ],
-			"up" : [ -0.73923053281361617, -0.60805019100000812, -0.28950506831651673 ],
-			"zoom" : 0.39999999999999969
-		}
-	],
-	"version_major" : 1,
-	"version_minor" : 0
-}
+            "class_name" : "ViewTrajectory",
+            "interval" : 29,
+            "is_loop" : False,
+            "trajectory" : 
+            [
+                {
+                    "boundingbox_max" : [ 0.69999999999999996, 0.69999999999999996, 0.5 ],
+                    "boundingbox_min" : [ -0.69999999999999996, -0.69999999999999996, -0.25 ],
+                    "field_of_view" : 60.0,
+                    "front" : [ 0.48357815199197129, 0.61548483867363935, 0.62235888704100151 ],
+                    "lookat" : [ 0.25470084286906458, 0.23151583259577294, 0.25384666908559167 ],
+                    "up" : [ -0.40379961065115821, -0.47397267466848536, 0.78249330866504885 ],
+                    "zoom" : 0.87999999999999901
+                }
+            ],
+            "version_major" : 1,
+            "version_minor" : 0
+        }
 
 
 def draw_registration_result(source, target, transformation):
@@ -57,7 +57,7 @@ def main():
     # Initialization
     # ------------------------------------------
     p = PointCloudProcessing()
-    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/14.ply')
+    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/01.ply')
 
     # ------------------------------------------
     # Execution
@@ -67,12 +67,13 @@ def main():
     p.preProcess(voxel_size=0.01)
 
     # Positonatig coordinate axis
-    p.transform(-108,0,0,0,0,0)
-    p.transform(0,0,-37,0,0,0)
-    p.transform(0,0,0,-0.85,-1.10,0.35)
+    p.transform(0,0,0,0.1,0.1,-1.2)
+    p.transform(-120,0,0,0,0,0)
+    p.transform(0,0,-90,0,0,0)
+    
 
     #Cropping point cloud
-    p.crop(-0.9, -0.9, -0.1, 0.0, 0.9, 0.4)
+    p.crop(-0.7, -0.7, -0.25, 0.7, 0.7, 0.4)
 
     #Find plane
     outliers = p.findPlane()
@@ -134,31 +135,31 @@ def main():
 # as the cereal box and assigns it to cereal_box_object_idx variable. Then it prints the index of the cereal box.
 
 # This code is useful for aligning a 3D model with a point cloud and finding the best fit for a specific object in the point cloud.
-    cereal_box_model = o3d.io.read_point_cloud('cereal_box_2_2_40.pcd')
+    # cereal_box_model = o3d.io.read_point_cloud('cereal_box_2_2_40.pcd')
 
-    for object_idx, object in enumerate(objects):
-        print("Apply point-to-point ICP to object " + str(object['idx']) )
+    # for object_idx, object in enumerate(objects):
+    #     print("Apply point-to-point ICP to object " + str(object['idx']) )
 
-        trans_init = np.asarray([[1, 0, 0, 0],
-                                 [0,1,0,0],
-                                 [0,0,1,0], 
-                                 [0.0, 0.0, 0.0, 1.0]])
-        reg_p2p = o3d.pipelines.registration.registration_icp(cereal_box_model, 
-                                                              object['points'], 2, trans_init, o3d.pipelines.registration.TransformationEstimationPointToPoint())
-        print(reg_p2p.inlier_rmse)
-        object['rmse'] = reg_p2p.inlier_rmse
-        # draw_registration_result(cereal_box_model, object['points'], reg_p2p.transformation)
+    #     trans_init = np.asarray([[1, 0, 0, 0],
+    #                              [0,1,0,0],
+    #                              [0,0,1,0], 
+    #                              [0.0, 0.0, 0.0, 1.0]])
+    #     reg_p2p = o3d.pipelines.registration.registration_icp(cereal_box_model, 
+    #                                                           object['points'], 2, trans_init, o3d.pipelines.registration.TransformationEstimationPointToPoint())
+    #     print(reg_p2p.inlier_rmse)
+    #     object['rmse'] = reg_p2p.inlier_rmse
+    #     # draw_registration_result(cereal_box_model, object['points'], reg_p2p.transformation)
 
-    # How to classify the object. Use the smallest fitting to decide which object is a "cereal box"
-    minimum_rmse = 10e8 # just a very large number to start
-    cereal_box_object_idx = None
+    # # How to classify the object. Use the smallest fitting to decide which object is a "cereal box"
+    # minimum_rmse = 10e8 # just a very large number to start
+    # cereal_box_object_idx = None
 
-    for object_idx, object in enumerate(objects):
-        if object['rmse'] < minimum_rmse: # Found a new minimum
-            minimum_rmse = object['rmse']
-            cereal_box_object_idx = object_idx
+    # for object_idx, object in enumerate(objects):
+    #     if object['rmse'] < minimum_rmse: # Found a new minimum
+    #         minimum_rmse = object['rmse']
+    #         cereal_box_object_idx = object_idx
 
-    print('The cereal box is object ' + str(cereal_box_object_idx))
+    # print('The cereal box is object ' + str(cereal_box_object_idx))
 
     # ------------------------------------------
     # Visualization
@@ -188,7 +189,7 @@ def main():
     widget3d = gui.SceneWidget()
     widget3d.scene = rendering.Open3DScene(w.renderer)
     widget3d.scene.set_background([0,0,0,1])  # set black background
-    material = rendering.Material()
+    material = rendering.MaterialRecord()
     material.shader = "defaultUnlit"
     material.point_size = 2 * w.scaling
 
@@ -201,8 +202,8 @@ def main():
         label_pos = [object['center'][0], object['center'][1], object['center'][2] + 0.15]
 
         label_text = object['idx']
-        if object_idx == cereal_box_object_idx:
-            label_text += ' (Cereal Box)'
+        # if object_idx == cereal_box_object_idx:
+        #     label_text += ' (Cereal Box)'
 
         label = widget3d.add_3d_label(label_pos, label_text)
         label.color = gui.Color(object['color'][0], object['color'][1],object['color'][2])
@@ -214,12 +215,12 @@ def main():
 
     app.run()
 
-    # o3d.visualization.draw_geometries(entities,
-    #                                 zoom=view['trajectory'][0]['zoom'],
-    #                                 front=view['trajectory'][0]['front'],
-    #                                 lookat=view['trajectory'][0]['lookat'],
-    #                                 up=view['trajectory'][0]['up'],
-    #                                 point_show_normal=False)
+    o3d.visualization.draw_geometries(entities, 
+                                    zoom=view['trajectory'][0]['zoom'],
+                                    front=view['trajectory'][0]['front'],
+                                    lookat=view['trajectory'][0]['lookat'],
+                                    up=view['trajectory'][0]['up'],
+                                    point_show_normal=False)
 
 
 
