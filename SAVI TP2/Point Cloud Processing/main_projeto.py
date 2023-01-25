@@ -57,7 +57,7 @@ def main():
     # Initialization
     # ------------------------------------------
     p = PointCloudProcessing()
-    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/01.ply')
+    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/02.ply')
 
     # ------------------------------------------
     # Execution
