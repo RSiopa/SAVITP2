@@ -57,7 +57,7 @@ def main():
     # Initialization
     # ------------------------------------------
     p = PointCloudProcessing()
-    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/02.ply')
+    p.loadPointCloud('/home/emanuel/Desktop/Segmentação de objetos numa cena/Segmentação/CENAS/rgbd-scenes-v2_pc/rgbd-scenes-v2/pc/01.ply')
 
     # ------------------------------------------
     # Execution
@@ -66,11 +66,14 @@ def main():
     # Resolution of point cloud
     p.preProcess(voxel_size=0.01)
 
+    # Find table plane
+    
+
     # Positonatig coordinate axis
     p.transform(0,0,0,0.1,0.1,-1.2)
     p.transform(-120,0,0,0,0,0)
     p.transform(0,0,-90,0,0,0)
-    
+    p.transform(0,-7,0,0,0,0)
 
     #Cropping point cloud
     p.crop(-0.7, -0.7, -0.25, 0.7, 0.7, 0.4)
@@ -189,7 +192,7 @@ def main():
     widget3d = gui.SceneWidget()
     widget3d.scene = rendering.Open3DScene(w.renderer)
     widget3d.scene.set_background([0,0,0,1])  # set black background
-    material = rendering.MaterialRecord()
+    material = rendering.Material()
     material.shader = "defaultUnlit"
     material.point_size = 2 * w.scaling
 
