@@ -57,7 +57,7 @@ def main():
     # Initialization
     # ------------------------------------------
     p = PointCloudProcessing()
-    p.loadPointCloud('/home/emanuel/Desktop/Segmentação de objetos numa cena/Segmentação/CENAS/rgbd-scenes-v2_pc/rgbd-scenes-v2/pc/01.ply')
+    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/01.ply')
 
     # ------------------------------------------
     # Execution
@@ -192,7 +192,7 @@ def main():
     widget3d = gui.SceneWidget()
     widget3d.scene = rendering.Open3DScene(w.renderer)
     widget3d.scene.set_background([0,0,0,1])  # set black background
-    material = rendering.Material()
+    material = rendering.MaterialRecord()
     material.shader = "defaultUnlit"
     material.point_size = 2 * w.scaling
 

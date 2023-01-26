@@ -74,7 +74,7 @@ def main():
 
     print("Load a ply point cloud, print it, and render it")
     #ply_point_cloud = o3d.data.PLYPointCloud()
-    point_cloud = o3d.io.read_point_cloud('/home/emanuel/Desktop/Segmentação de objetos numa cena/Segmentação/CENAS/rgbd-scenes-v2_pc/rgbd-scenes-v2/pc/01.ply')
+    point_cloud = o3d.io.read_point_cloud('Scenes/rgbd-scenes-v2/pc/01.ply')
     print(point_cloud)
     print(np.asarray(point_cloud.points))
 
