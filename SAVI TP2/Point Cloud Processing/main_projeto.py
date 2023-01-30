@@ -50,6 +50,33 @@ def draw_registration_result(source, target, transformation):
                                       front=[0.9288, -0.2951, -0.2242],
                                       lookat=[1.6784, 2.0612, 1.4451],
                                       up=[-0.3402, -0.9189, -0.1996])
+    
+
+class PlaneDetection:
+    def __init__(self, point_cloud):
+
+        self.point_cloud = point_cloud
+
+    def colorizeInliers(self, r, g, b):
+        self.inlier_cloud.paint_uniform_color([r, g, b])
+
+    def segment(self, distance_threshold=0.05, ransac_n=3, num_iterations=100):
+
+        print('Starting plane detection')
+        plane_model, inlier_idxs = self.point_cloud.segment_plane(distance_threshold=distance_threshold, ransac_n=ransac_n, num_iterations=num_iterations)
+        [self.a, self.b, self.c, self.d] = plane_model
+
+        self.inlier_cloud = self.point_cloud.select_by_index(inlier_idxs)
+
+        outlier_cloud = self.point_cloud.select_by_index(inlier_idxs, invert=False)
+
+        return outlier_cloud
+
+    def __str__(self):
+        text = 'Segmented plane from pc with ' + str(len(self.point_cloud.points)) + ' with ' + str(len(self.inlier_cloud.points)) + ' inliers. '
+        text += '\nPlane: ' + str(self.a) + ' x + ' + str(self.b) + ' y + ' + str(self.c) + ' z + ' + str(self.d) + ' = 0'
+        return text
+    
 
 def main():
 
@@ -57,7 +84,7 @@ def main():
     # Initialization
     # ------------------------------------------
     p = PointCloudProcessing()
-    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/01.ply')
+    p.loadPointCloud('Scenes/rgbd-scenes-v2/pc/13.ply')
 
     # ------------------------------------------
     # Execution
@@ -67,16 +94,49 @@ def main():
     p.preProcess(voxel_size=0.01)
 
     # Find table plane
-    
+    point_cloud_original = o3d.io.read_point_cloud('Scenes/rgbd-scenes-v2/pc/13.ply')
+
+    # Estimate normals
+    point_cloud_original.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.05, max_nn=25))
+    point_cloud_original.orient_normals_to_align_with_direction(orientation_reference=np.array([0., 0., 1.]))
+
+    angle_tolerance = 0.1
+    vx, vy, vz = 1, 0, 0
+    norm_b = math.sqrt(vx ** 2 + vy ** 2 + vz ** 2)
+    horizontal_idxs = []
+    for idx, normal in enumerate(point_cloud_original.normals):
+
+        nx, ny, nz = normal
+        ab = nx*vx + ny*vy + nz*vz
+        norm_a = math.sqrt(nx**2 + ny**2 + nz**2)
+        angle = math.acos(ab/(norm_a * norm_b)) * 180/math.pi
+
+        if abs(angle - 90) < angle_tolerance:
+            horizontal_idxs.append(idx)
+
+    horizontal_cloud = point_cloud_original.select_by_index(horizontal_idxs)
+    non_horizontal_cloud = point_cloud_original.select_by_index(horizontal_idxs, invert=True)
+
+    horizontal_cloud.paint_uniform_color([0.5, 0, 1])
+
+    (table_point_cloud, lista) = horizontal_cloud.remove_radius_outlier(150, 0.3)
+
+    table_plane = PlaneDetection(table_point_cloud)
+
+    table_plane_point_cloud = table_plane.segment()
+
+    table_center = table_plane_point_cloud.get_center()
+
+    print(table_center)
 
     # Positonatig coordinate axis
-    p.transform(0,0,0,0.1,0.1,-1.2)
+    p.transform(0,0,0,-table_center[0],-table_center[1],-table_center[2])
     p.transform(-120,0,0,0,0,0)
-    p.transform(0,0,-90,0,0,0)
+    p.transform(0,0,-120,0,0,0)
     p.transform(0,-7,0,0,0,0)
 
     #Cropping point cloud
-    p.crop(-0.7, -0.7, -0.25, 0.7, 0.7, 0.4)
+    p.crop(-0.7, -0.5, -0.05, 0.7, 0.5, 0.5)
 
     #Find plane
     outliers = p.findPlane()
