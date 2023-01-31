@@ -2,6 +2,7 @@
 
 import copy
 import math
+import os
 import cv2
 import pyttsx3 
 import random
@@ -10,7 +11,8 @@ import open3d as o3d
 import numpy as np
 import open3d.visualization.gui as gui
 import open3d.visualization.rendering as rendering
-from TTS import TTS
+from gtts import gTTS
+import playsound 
 from point_cloud_processing_projeto import PointCloudProcessing
 from matplotlib import cm
 from more_itertools import locate
@@ -71,6 +73,15 @@ def convert_rgb_to_names(rgb_tuple):
     kdt_db = KDTree(rgb_values)    
     distance, index = kdt_db.query(rgb_tuple)
     return f'{names[index]}'
+
+
+def speak(text):
+    tts = gTTS(text=text, lang='en')
+
+    filename = "tts.mp3"
+    tts.save(filename)
+    playsound.playsound(filename)
+    os.remove(filename)
 
 
 class PlaneDetection:
@@ -354,7 +365,7 @@ def main():
 
             if characteristic_number == 3:
                 text_to_add = Fore.GREEN + 'Object number ' + Fore.RED + '1 ' + Style.RESET_ALL + Fore.GREEN + 'is ' + Style.RESET_ALL + Fore.RED + str(object.get(characteristic_list[characteristic_number])) + Style.RESET_ALL
-                speech_to_add = 'Object number 1 is ' + str(round(object.get(characteristic_list[characteristic_number])*100))
+                speech_to_add = 'Object number 1 is ' + str(object.get(characteristic_list[characteristic_number]))
             else:
                 text_to_add = Fore.GREEN + 'Object number ' + Fore.RED + '1 ' + Style.RESET_ALL + Fore.GREEN + 'is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
                 speech_to_add = 'Object number 1 is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
@@ -388,10 +399,7 @@ def main():
     print(str(info_text))
 
     if args['text_to_speech'] == True:
-        # speaker = pyttsx3.init()
-        # speaker.say(str(info_speech))
-        # speaker.runAndWait()
-        TTS(str(info_speech))
+        speak(str(info_speech))
 
 
 if __name__ == "__main__":
