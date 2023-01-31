@@ -33,12 +33,11 @@ def Classifier(image):
     transforms.Resize((224,224)),
     transforms.ToTensor()
     ])
-
-    # image_pill = Image.open(image)
+    
     image_pill = image
     
     image_t= PIL_to_Tensor(image_pill)
-    # image_t = image_t[0:3]       
+         
     image_t = image_t.unsqueeze(0)
 
 
@@ -151,8 +150,6 @@ def Classifier(image):
         class_name = 'toothpaste'
     elif label == 50:
         class_name = 'water_bottle'
-    elif label == 48:
-        class_name = 'toothbrush'
     else:
         raise ValueError('Unknown class')
 
