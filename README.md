@@ -11,12 +11,12 @@ The data used for training the classifier and the point clouds can be accessed a
 The dataset for the classifier ([RGB-D Object Dataset](http://rgbd-dataset.cs.washington.edu/dataset/)) contains 300 objects grouped into 51 categories.
 The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset/rgbd-scenes-v2/) contains the 14 scenes with furniture (sofas and tables) and a subset of the objects present from the RGB-D Object Dataset (bowls, caps, cereal boxes, coffee mugs, and soda cans).
 
-### Get Started
+# Get Started
 
-# Model Training
-First, B.O.T. must train his eyes and brain.
-In _/SAVI TP2/Model_ Training you can find the script model_training.py to train B.O.T.
-We already provide a trainned model in the folder _/SAVI TP2/Model_ Training/Best_Model if you wish to use.
+### Model Training
+First, B.O.T. must train his eyes and brain. Use your machine power to traine his void head.
+In ```_/SAVI TP2/Model Training_```  you can find the script model_training.py to train B.O.T.
+We already provide a trainned model in the folder ```_/SAVI TP2/Model Training/Best_Model_``` if you wish to use.
 
 ![Image](docs/training.png)
 ![Image](docs/traininggraph.png)
@@ -61,11 +61,11 @@ options:
                         Define batch size for testing. metavar=TESTING_BATCH_SIZE, type=int, choices=range(25, 10000), default=500
 ```
 
-# Point Cloud Processing
+### Point Cloud Processing
 
 ![Image](docs/pointCloudTerminal.png)
 
-Calling the _main_projecto.py_ script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
+Going to ```_/SAVI TP2/Point Cloud Processing_```and calling the ```_main_projecto.py_``` script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
 
 ```
 usage: main_projeto.py [-h] [-s SCENE_NUMBER] [-tts] [-v]
@@ -82,9 +82,9 @@ options:
                         Show visualization windows. default=False
 ```
 
-![Image](preview1.png)
+![Image](docs/preview1.png)
 
-# Autores
+# Authors
 - [Rafael Siopa](https://github.com/RSiopa)
 - [Gil Viegas](https://github.com/gilviegas)
 - [Emanuel Fonseca](https://github.com/emanuelfonseca99)
