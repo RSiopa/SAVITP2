@@ -39,13 +39,13 @@ def main():
                         help='Define the path for the model file.\n ')
     parser.add_argument('-dp', '--dataset_path', default='Datasets/rgbd-dataset', 
                         help='Define the path for the dataset.\n ')
-    parser.add_argument('-in', '--image_number', type=int, choices=range(1, 200000), default=1000, 
+    parser.add_argument('-in', '--image_number', metavar='IMAGE_NUMBER', type=int, choices=range(1, 200000), default=1000, 
                         help='Define the number of images to use for sampling.\n ')
     parser.add_argument('-ts', '--test_size', default=0.2, 
                         help='Define the percentage of images used for testing.\n ')
-    parser.add_argument('-tbs', '--train_batch_size', type=int, choices=range(25, 10000), default=500, 
+    parser.add_argument('-tbs', '--train_batch_size', metavar='TRAINING_BATCH_SIZE', type=int, choices=range(25, 10000), default=500, 
                         help='Define batch size for training.\n ')
-    parser.add_argument('-tesbs', '--test_batch_size', type=int, choices=range(25, 10000), default=500, 
+    parser.add_argument('-tesbs', '--test_batch_size', metavar='TESTING_BATCH_SIZE', type=int, choices=range(25, 10000), default=500, 
                         help='Define batch size for testing.\n ')
     args = vars(parser.parse_args())
 
@@ -215,6 +215,10 @@ def main():
             break
         elif epoch_train_loss < termination_loss_threshold:
             print('Finished training. Reached target loss.')
+            break
+
+        # Stops the program when 'q' is pressed
+        if cv2.waitKey(1) == ord('q'):                   
             break
     
     # End result until key pressed
