@@ -22,16 +22,18 @@ class PointCloudProcessing():
     def loadPointCloud(self, filename):
         print("Load a point cloud from " + filename)
         self.pcd = o3d.io.read_point_cloud(filename)
-        self.original = deepcopy(self.pcd) # make a vbackup of the original point cloud
 
-    def preProcess(self,voxel_size=0.02):
+        # Make a backup of the original pointcloud
+        self.original = deepcopy(self.pcd) 
+
+    def preProcess(self,voxel_size=0.01):
+
         # Downsampling using voxel grid filter
         self.pcd = self.pcd.voxel_down_sample(voxel_size=voxel_size) 
         print('Downsampling reduced point cloud from  ' + str(len(self.original.points)) + ' to ' + str(len(self.pcd.points))+  ' points')
 
         # Estimate normals
         self.pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.2, max_nn=30))
-        # TODO Is this a good orientation???
         self.pcd.orient_normals_to_align_with_direction(orientation_reference=np.array([0., 0., 1.]))
         
     def transform(self, r,p,y,tx,ty,tz):
@@ -41,16 +43,16 @@ class PointCloudProcessing():
         p = math.pi * p / 180.0
         y = math.pi * y / 180.0
 
-        # First rotate
+        # Rotation
         rotation = self.pcd.get_rotation_matrix_from_xyz((r,p,y))
         self.pcd.rotate(rotation, center=(0, 0, 0))
 
-        # Then translate
+        # Translation
         self.pcd = self.pcd.translate((tx,ty,tz))
 
     def crop(self, min_x, min_y, min_z, max_x, max_y, max_z):
 
-        #First create a point cloud with the vertices of the desired bounding box
+        # Create a point cloud with the vertices of the desired bounding box
         np_points = np.ndarray((8,3),dtype=float)
 
         np_points[0,:] = [min_x, min_y, min_z]
