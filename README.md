@@ -2,7 +2,7 @@
 # B.O.T. Finder
 What's B.O.T. purpose? He says what's on the table.
 <p align="center">
-  <img width="460" height="300" src="https://github.com/RSiopa/SAVITP2/blob/main/docs/butterbot.png?raw=true">
+  <img src="https://github.com/RSiopa/SAVITP2/blob/main/docs/butterbot.png?raw=true">
 </p>
 
 ![Image](docs/butterbot.png)
