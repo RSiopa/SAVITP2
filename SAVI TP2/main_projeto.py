@@ -12,7 +12,9 @@ import numpy as np
 import open3d.visualization.gui as gui
 import open3d.visualization.rendering as rendering
 from gtts import gTTS
+from Classifier import Classifier
 import playsound 
+from PIL import Image
 from point_cloud_processing_projeto import PointCloudProcessing
 from matplotlib import cm
 from more_itertools import locate
@@ -400,6 +402,12 @@ def main():
 
     if args['text_to_speech'] == True:
         speak(str(info_speech))
+
+    # Trying to classify an image
+    image = Image.open('5.png')
+
+    object_class = Classifier(image)
+    print(object_class)
 
 
 if __name__ == "__main__":

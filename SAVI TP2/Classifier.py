@@ -17,10 +17,11 @@ from PIL import Image
 from model import Model
 
 
+# Image Classifier
 def Classifier(image):
 
-
-    model_path = 'model.pkl'
+    # Use best model
+    model_path = 'Best_Model/model.pkl'
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'  # cuda: 0 index of gpu
     model = Model()
 
@@ -29,25 +30,19 @@ def Classifier(image):
     model.to(device)
     model.eval()
 
-    PIL_to_Tensor = transforms.Compose([
-    transforms.Resize((224,224)),
-    transforms.ToTensor()
-    ])
+    PIL_to_Tensor = transforms.Compose([transforms.Resize((224,224)), transforms.ToTensor()])
     
-    image_pill = image
-    
-    image_t= PIL_to_Tensor(image_pill)
-         
+    # PIL to Tensor
+    image_t= PIL_to_Tensor(image)
     image_t = image_t.unsqueeze(0)
-
 
     image_t = image_t.to(device)
     label_t_predicted = model.forward(image_t)
     
     prediction = torch.argmax(label_t_predicted)
     label = prediction.data.item()
-    
 
+    # Every possible label
     if label == 0:
         class_name = 'apple'
     elif label == 1:
