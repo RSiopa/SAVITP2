@@ -15,7 +15,7 @@ The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset
 # Get Started
 
 ### Model Training
-First, B.O.T. must train his eyes and brain. Use your machine power to traine his void head.
+First, B.O.T. must train his eyes and brain. Use your machine power to train his void head.
 In ```/SAVI TP2/Model Training```  you can find the script model_training.py to train B.O.T.
 We already provide a trainned model in the folder ```/SAVI TP2/Model Training/Best_Model``` if you wish to use.
 
