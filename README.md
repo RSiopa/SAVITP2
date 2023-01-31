@@ -1,6 +1,9 @@
 
 # B.O.T. Finder
-What's B.O.T. porpouse? He says what's on the table.
+What's B.O.T. purpose? He says what's on the table.
+<p align="center">
+  <img width="460" height="300" src="https://github.com/RSiopa/SAVITP2/blob/main/docs/butterbot.png?raw=true">
+</p>
 
 ![Image](docs/butterbot.png)
 
@@ -15,8 +18,8 @@ The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset
 
 ### Model Training
 First, B.O.T. must train his eyes and brain. Use your machine power to traine his void head.
-In ```_/SAVI TP2/Model Training_```  you can find the script model_training.py to train B.O.T.
-We already provide a trainned model in the folder ```_/SAVI TP2/Model Training/Best_Model_``` if you wish to use.
+In ```/SAVI TP2/Model Training```  you can find the script model_training.py to train B.O.T.
+We already provide a trainned model in the folder ```/SAVI TP2/Model Training/Best_Model``` if you wish to use.
 
 ![Image](docs/training.png)
 ![Image](docs/traininggraph.png)
@@ -65,7 +68,7 @@ options:
 
 ![Image](docs/pointCloudTerminal.png)
 
-Going to ```_/SAVI TP2/Point Cloud Processing_```and calling the ```_main_projecto.py_``` script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
+Going to ```/SAVI TP2/Point Cloud Processing```and calling the ```main_projecto.py``` script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
 
 ```
 usage: main_projeto.py [-h] [-s SCENE_NUMBER] [-tts] [-v]
@@ -74,10 +77,13 @@ PointCloud Scene Processor used to detect items on top of a table and identify t
 
 options:
   -h, --help            show this help message and exit
+
   -s SCENE_NUMBER, --scene SCENE_NUMBER
                         Choose a scene from 1 to 14. Do not use argument to use a random scene.
+
   -tts, --text_to_speech
                         Use text to speech. default=False
+
   -v, --show_visualization
                         Show visualization windows. default=False
 ```
