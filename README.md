@@ -1,34 +1,21 @@
 
+# B.O.T. Finder
+What's B.O.T. porpouse? To find stuff on tables and tell us what they are.
+O B.O.T. Finder was created to respond to the challenge "Where's my coffee mug?" proposed in the subject Advanced Industrial Vision Systems at the University of Aveiro.
+It consists of a system that, from a given cloud of points, can detect and extract objects, calculate some of their characteristics and in turn classify the detected object, based on a previously trained deep learning classifier. Finally being able to return the name of the objects and some of their characteristics.
 
-# Introdução
-Este projeto, denominado de 'where's my coffe mug?', tem como meta principal a deteção de objetos colocados em cima de uma
-mesa presente numa cena.
- Para um melhor discernimento do seguimento das tarefas e funções deste programa, o mesmo foi separado por objetivos:
-
-
-# Objetivo 1 - Treino de um classificador em deep learning
-Utilizando o 'RGB-D Object Dataset' desenvolveu-se uma rede de deep learning capaz de efetuar a classificação dos objetos. Esta rede dividiu o dataset em treino e teste (80% / 20%).
-A pasta Model Training contém todos os scripts necessarios para a correcta execução do 'model_training.py', que é o script no qual é possivel efetivamente treinar um modelo em deep learning, este programa carrega um conjunto de dados RGB-D e interrompe o processo de treino se o numero máximo de epocas for atingido ou o limite da loss for alcansado.
-Este programa também fornece um relatório visual do desempenho do modelo nos conjuntos de treino e teste. As imagens 1 e 2 são ilucidativas daquilo que foi em cima explicado.
-![Imagem 1](../SAVITP2/SAVI%20TP2/Readme%20Images/1.png)
-![Imagem 2](../SAVITP2/SAVI%20TP2/Readme%20Images/2.png)
-
- O 'classification_visualizer.py' implementa uma classe que é usada para visualizar os resultados da classificação de imagens. Tem em 3 argumentos, onde as entradas são as imagens, os rótulos são a verdade e as saídas são as previsões do modelo.
- O 'data_visualizer.py'é uma classe que capaz de representar pontos na janela com um grafico carteziano com determinados parâmetros .
- 
-A classe Dataset recebe uma lista de nomes de arquivos de imagem como entrada e posteriormente cria rótulos para cada imagem com base no nome do arquivo e armazena-os na lista self.labels. A classe também define um conjunto de transformações que são aplicadas a cada imagem.
- 
- O script 'model.py' implementação de um modelo de Rede Neural para classificação de imagens. A primeira camada totalmente conectada mapeia os recursos extraídos para um espaço de 10 dimensões e a segunda camada totalmente conectada mapeia para um espaço de 51 dimensões. O modelo também possui uma camada de dropout para evitar o overfitting.
- 
-# Objetivo 2 - Pre-processamento 3D
+The data used for training the classifier and the point clouds can be accessed at [Washington RGB-D Dataset](http://rgbd-dataset.cs.washington.edu/dataset/).
+The dataset for the classifier ([RGB-D Object Dataset](http://rgbd-dataset.cs.washington.edu/dataset/)) contains 300 objects grouped into 51 categories.
+The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset/rgbd-scenes-v2/) contains the 14 scenes with furniture (sofas and tables) and a subset of the objects present from the RGB-D Object Dataset (bowls, caps, cereal boxes, coffee mugs, and soda cans).
+# Get Started
 
 
 
-# Objetivo 3 - Classificação de objetos na cena
+# Autores
+- [Rafael Siopa](https://github.com/RSiopa)
+- [Gil Viegas](https://github.com/gilviegas)
+- [Emanuel Fonseca](https://github.com/emanuelfonseca99)
 
+# About
+We are Industrial Automation Engineering students at Universidade de Aveiro.
 
-
-# Objetivo 4 - Descrição áudio da cena
-
-
-# Objetivo 5 - Sistema em tempo real
