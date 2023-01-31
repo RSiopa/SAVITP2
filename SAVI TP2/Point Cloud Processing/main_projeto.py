@@ -10,10 +10,16 @@ import open3d as o3d
 import numpy as np
 import open3d.visualization.gui as gui
 import open3d.visualization.rendering as rendering
+from TTS import TTS
 from point_cloud_processing_projeto import PointCloudProcessing
 from matplotlib import cm
 from more_itertools import locate
 from colorama import Fore, Back, Style
+from scipy.spatial import KDTree
+from webcolors import (
+    CSS3_HEX_TO_NAMES,
+    hex_to_rgb,
+)
 
 # Default view
 view = {
@@ -50,6 +56,22 @@ def draw_registration_result(source, target, transformation):
                                       lookat=[1.6784, 2.0612, 1.4451],
                                       up=[-0.3402, -0.9189, -0.1996])
     
+
+# Convert color RGB values to color name
+def convert_rgb_to_names(rgb_tuple):
+    
+    # Dictionary of all the hex and their respective names in css3
+    css3_db = CSS3_HEX_TO_NAMES
+    names = []
+    rgb_values = []    
+    for color_hex, color_name in css3_db.items():
+        names.append(color_name)
+        rgb_values.append(hex_to_rgb(color_hex))
+    
+    kdt_db = KDTree(rgb_values)    
+    distance, index = kdt_db.query(rgb_tuple)
+    return f'{names[index]}'
+
 
 class PlaneDetection:
     def __init__(self, point_cloud):
@@ -192,6 +214,16 @@ def main():
         d['points'].paint_uniform_color(d['color'])
         d['center'] = d['points'].get_center()
 
+        real_color = [0,0,0]
+
+        for color in np.asarray(object_points.colors):
+            
+            real_color = real_color + color
+
+        real_color = real_color/np.asarray(object_points.colors).shape[0]
+        
+        d['real_color'] = convert_rgb_to_names(real_color)
+
         # Get max and min from objects
         max_bound = d['points'].get_max_bound()
         min_bound = d['points'].get_min_bound()
@@ -310,8 +342,8 @@ def main():
     # Text to Speech
     # ------------------------------------------
 
-    characteristic_list = ['length', 'width', 'height']
-    adjective_list = ['long', 'wide', 'tall']
+    characteristic_list = ['length', 'width', 'height', 'real_color']
+    adjective_list = ['long', 'wide', 'tall', ' ']
 
     info_text = Fore.GREEN + '\nThis room has ' + Fore.RED + str(len(objects)) + Style.RESET_ALL + Fore.GREEN + ' objects on the table.\n' + Style.RESET_ALL
     info_speech ='This room has ' + str(len(objects)) + ' objects on the table. '
@@ -319,29 +351,47 @@ def main():
     for object_idx, object in enumerate(objects):
         if object_idx == 0:
             characteristic_number = random.randint(0, len(characteristic_list)-1)
-            text_to_add = Fore.GREEN + 'Object number ' + Fore.RED + '1 ' + Style.RESET_ALL + Fore.GREEN + 'is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
-            speech_to_add = 'Object number 1 is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
+
+            if characteristic_number == 3:
+                text_to_add = Fore.GREEN + 'Object number ' + Fore.RED + '1 ' + Style.RESET_ALL + Fore.GREEN + 'is ' + Style.RESET_ALL + Fore.RED + str(object.get(characteristic_list[characteristic_number])) + Style.RESET_ALL
+                speech_to_add = 'Object number 1 is ' + str(round(object.get(characteristic_list[characteristic_number])*100))
+            else:
+                text_to_add = Fore.GREEN + 'Object number ' + Fore.RED + '1 ' + Style.RESET_ALL + Fore.GREEN + 'is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
+                speech_to_add = 'Object number 1 is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
             info_text = info_text + text_to_add
             info_speech = info_speech + speech_to_add
+
         elif object_idx == len(objects)-1 and object_idx != 0:
             characteristic_number = random.randint(0, len(characteristic_list)-1)
-            text_to_add = Fore.GREEN + ' and object number ' + Fore.RED + str(len(objects)) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL + Fore.GREEN + '.\n' + Style.RESET_ALL
-            speech_to_add = ' and object number ' + str(len(objects)) + ' is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number] + '.'
+
+            if characteristic_number == 3:
+                text_to_add = Fore.GREEN + ' and object number ' + Fore.RED + str(len(objects)) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(object.get(characteristic_list[characteristic_number])) + Style.RESET_ALL + Fore.GREEN + '.\n' + Style.RESET_ALL
+                speech_to_add = ' and object number ' + str(len(objects)) + ' is ' + str(object.get(characteristic_list[characteristic_number])) + '.'
+            else:
+                text_to_add = Fore.GREEN + ' and object number ' + Fore.RED + str(len(objects)) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL + Fore.GREEN + '.\n' + Style.RESET_ALL
+                speech_to_add = ' and object number ' + str(len(objects)) + ' is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number] + '.'
             info_text = info_text + text_to_add
             info_speech = info_speech + speech_to_add
+
         else:
             characteristic_number = random.randint(0, len(characteristic_list)-1)
-            text_to_add = Fore.GREEN + ', object number ' + Fore.RED + str(object_idx+1) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
-            speech_to_add = ', object number ' + str(object_idx+1) + ' is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
+            
+            if characteristic_number == 3:
+                text_to_add = Fore.GREEN + ', object number ' + Fore.RED + str(object_idx+1) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(object.get(characteristic_list[characteristic_number])) + Style.RESET_ALL
+                speech_to_add = ', object number ' + str(object_idx+1) + ' is ' + str(object.get(characteristic_list[characteristic_number]))
+            else:
+                text_to_add = Fore.GREEN + ', object number ' + Fore.RED + str(object_idx+1) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
+                speech_to_add = ', object number ' + str(object_idx+1) + ' is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
             info_text = info_text + text_to_add
             info_speech = info_speech + speech_to_add
 
     print(str(info_text))
 
     if args['text_to_speech'] == True:
-        speaker = pyttsx3.init()
-        speaker.say(str(info_speech))
-        speaker.runAndWait()
+        # speaker = pyttsx3.init()
+        # speaker.say(str(info_speech))
+        # speaker.runAndWait()
+        TTS(str(info_speech))
 
 
 if __name__ == "__main__":
