@@ -1,25 +1,4 @@
 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/RSiopa/SAVITP2">
-    <img src="docs/buterbot.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">Best-README-Template</h3>
-
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/RSiopa/SAVITP2/tree/main/docs"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/RSiopa/SAVITP2/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/RSiopa/SAVITP2/issues">Request Feature</a>
-  </p>
-</div>
-
 # B.O.T. Finder
 What's B.O.T. porpouse? To find stuff on tables and tell us what they are.
 
