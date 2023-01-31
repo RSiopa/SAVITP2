@@ -1,6 +1,6 @@
 
 # B.O.T. Finder
-What's B.O.T. porpouse? To find stuff on tables and tell us what they are.
+What's B.O.T. porpouse? He says what's on the table.
 
 ![Image](docs/butterbot.png)
 
