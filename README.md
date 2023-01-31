@@ -11,10 +11,15 @@ The data used for training the classifier and the point clouds can be accessed a
 The dataset for the classifier ([RGB-D Object Dataset](http://rgbd-dataset.cs.washington.edu/dataset/)) contains 300 objects grouped into 51 categories.
 The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset/rgbd-scenes-v2/) contains the 14 scenes with furniture (sofas and tables) and a subset of the objects present from the RGB-D Object Dataset (bowls, caps, cereal boxes, coffee mugs, and soda cans).
 
-# Get Started
+### Get Started
+
+# Model Training
 First, B.O.T. must train his eyes and brain.
-In /SAVI TP2/Model Training you can find the script model_training.py to train B.O.T.
-We already provide a trainned model in the folder /SAVI TP2/Model Training/Best_Model if you wish to use.
+In _/SAVI TP2/Model_ Training you can find the script model_training.py to train B.O.T.
+We already provide a trainned model in the folder _/SAVI TP2/Model_ Training/Best_Model if you wish to use.
+
+![Image](docs/training.png)
+![Image](docs/traininggraph.png)
 
 ```
 usage: model_training.py [-h] [-rt] [-lr LEARNING_RATE] [-mne MAXIMUM_NUM_EPOCHS] [-tlt TERMINATION_LOSS_THRESHOLD] [-mp MODEL_PATH] [-dp DATASET_PATH] [-in IMAGE_NUMBER] [-ts TEST_SIZE]
@@ -56,8 +61,28 @@ options:
                         Define batch size for testing. metavar=TESTING_BATCH_SIZE, type=int, choices=range(25, 10000), default=500
 ```
 
-![Image](docs/preview1.png)
+# Point Cloud Processing
 
+![Image](docs/pointCloudTerminal.png)
+
+Calling the _main_projecto.py_ script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
+
+```
+usage: main_projeto.py [-h] [-s SCENE_NUMBER] [-tts] [-v]
+
+PointCloud Scene Processor used to detect items on top of a table and identify them.
+
+options:
+  -h, --help            show this help message and exit
+  -s SCENE_NUMBER, --scene SCENE_NUMBER
+                        Choose a scene from 1 to 14. Do not use argument to use a random scene.
+  -tts, --text_to_speech
+                        Use text to speech. default=False
+  -v, --show_visualization
+                        Show visualization windows. default=False
+```
+
+![Image](preview1.png)
 
 # Autores
 - [Rafael Siopa](https://github.com/RSiopa)

@@ -86,12 +86,12 @@ def main():
 
     # Setting up the arguments
     parser = argparse.ArgumentParser(description='PointCloud Scene Processor used to detect items on top of a table and identify them.')  # arguments
-    parser.add_argument('-s', '--scene',type=int, choices=range(1, 15), 
+    parser.add_argument('-s', '--scene',metavar = 'SCENE_NUMBER', type=int, choices=range(1, 15), 
                         help='Choose a scene from 1 to 14. Do not use argument to use a random scene.\n ')
     parser.add_argument('-tts', '--text_to_speech', action='store_true', default=False, 
-                        help='Use text to speech.\n ')
+                        help='Use text to speech. default=False\n ')
     parser.add_argument('-v', '--show_visualization', action='store_true', default=False, 
-                        help='Show visualization windows.\n ')
+                        help='Show visualization windows. default=False\n ')
     args = vars(parser.parse_args())
 
     scene_number_list = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14']
