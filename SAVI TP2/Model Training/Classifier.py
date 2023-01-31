@@ -28,13 +28,6 @@ def Classifier(image):
     model.load_state_dict(load_model['model_state_dict'])
     model.to(device)
     model.eval()
-    # images_path = ''
-    # image_filenames = glob.glob(images_path + '')
-    # dataset_path = '/home/rafael/Desktop/rgbd-dataset'
-    # image_filenames = glob.glob(dataset_path + '/*/*/*_crop.png')
-
-    # Sample only a few images to speed up development
-    # image_filenames = random.sample(image_filenames, k=900)
 
     PIL_to_Tensor = transforms.Compose([
     transforms.Resize((224,224)),
