@@ -16,8 +16,8 @@ The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset
 
 ### Model Training
 First, B.O.T. must train his eyes and brain. Use your machine power to train his void head.
-In ```/SAVI TP2/Model Training```  you can find the script model_training.py to train B.O.T.
-We already provide a trainned model in the folder ```/SAVI TP2/Model Training/Best_Model``` if you wish to use.
+Find the script model_training.py and run it to train B.O.T.
+We already provide a trainned model in the folder ```/SAVI TP2/Best_Model``` if you wish to use.
 
 ![Image](docs/training.png)
 ![Image](docs/traininggraph.png)
@@ -66,7 +66,7 @@ options:
 
 ![Image](docs/pointCloudTerminal.png)
 
-Going to ```/SAVI TP2/Point Cloud Processing```and calling the ```main_projecto.py``` script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
+Calling the ```main_projecto.py``` script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
 
 ```
 usage: main_projeto.py [-h] [-s SCENE_NUMBER] [-tts] [-v]
