@@ -13,7 +13,7 @@ The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset
 
 # Get Started
 
-![Image](docs/preview1.png)
+![Image](docs/Preview1.png)
 
 
 # Autores
