@@ -88,6 +88,10 @@ options:
 
 ![Image](docs/preview1.png)
 
+### RGB-D Camera Live Detection
+
+In progress
+
 # Authors
 - [Rafael Siopa](https://github.com/RSiopa)
 - [Gil Viegas](https://github.com/gilviegas)
