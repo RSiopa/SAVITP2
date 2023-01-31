@@ -2,6 +2,7 @@
 
 import copy
 import math
+import cv2
 import pyttsx3 
 import random
 import argparse
@@ -12,6 +13,7 @@ import open3d.visualization.rendering as rendering
 from point_cloud_processing_projeto import PointCloudProcessing
 from matplotlib import cm
 from more_itertools import locate
+from colorama import Fore, Back, Style
 
 # Default view
 view = {
@@ -86,6 +88,10 @@ def main():
     parser = argparse.ArgumentParser(description='PointCloud Scene Processor used to detect items on top of a table and identify them.')  # arguments
     parser.add_argument('-s', '--scene',type=int, choices=range(1, 15), 
                         help='Choose a scene from 1 to 14. Do not use argument to use a random scene.\n ')
+    parser.add_argument('-tts', '--text_to_speech', action='store_true', default=False, 
+                        help='Use text to speech.\n ')
+    parser.add_argument('-v', '--show_visualization', action='store_true', default=False, 
+                        help='Show visualization windows.\n ')
     args = vars(parser.parse_args())
 
     scene_number_list = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14']
@@ -210,7 +216,6 @@ def main():
 
         # Add the dict of the object to the list
         objects.append(d)
-
     
     # cereal_box_model = o3d.io.read_point_cloud('cereal_box_2_2_40.pcd')
 
@@ -238,67 +243,105 @@ def main():
 
     # print('The cereal box is object ' + str(cereal_box_object_idx))
 
+    if args['show_visualization'] == True:
+
+        # ------------------------------------------
+        # Visualization
+        # ------------------------------------------
+
+        # Create a list of entities to draw
+        p.inliers.paint_uniform_color([0,1,1])
+        entities = []
+
+        frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
+        entities.append(frame)
+
+        # Draw bbox
+        bbox_to_draw = o3d.geometry.LineSet.create_from_axis_aligned_bounding_box(p.bbox)
+        entities.append(bbox_to_draw)
+
+        # Draw objects
+        for object_idx, object in enumerate(objects):
+            entities.append(object['points'])
+
+        # Make a more complex open3D window to show object labels on top of 3d
+        app = gui.Application.instance
+
+        # Create an open3d app
+        app.initialize() 
+
+        w = app.create_window("Open3D - 3D Text", 1920, 1080)
+        widget3d = gui.SceneWidget()
+        widget3d.scene = rendering.Open3DScene(w.renderer)
+        widget3d.scene.set_background([0,0,0,1])  # Set black background
+        material = rendering.MaterialRecord()
+        material.shader = "defaultUnlit"
+        material.point_size = 2 * w.scaling
+
+        # Draw entities
+        for entity_idx, entity in enumerate(entities):
+            widget3d.scene.add_geometry("Entity " + str(entity_idx), entity, material)
+
+        # Draw labels
+        for object_idx, object in enumerate(objects):
+            label_pos = [object['center'][0], object['center'][1], object['center'][2] + 0.15]
+
+            label_text = object['idx']
+            # if object_idx == cereal_box_object_idx:
+            #     label_text += ' (Cereal Box)'
+
+            label = widget3d.add_3d_label(label_pos, label_text)
+            label.color = gui.Color(object['color'][0], object['color'][1],object['color'][2])
+            
+        bbox = widget3d.scene.bounding_box
+        widget3d.setup_camera(60.0, bbox, bbox.get_center())
+        w.add_child(widget3d)
+
+        app.run()
+
+        o3d.visualization.draw_geometries(entities, 
+                                        zoom=view['trajectory'][0]['zoom'],
+                                        front=view['trajectory'][0]['front'],
+                                        lookat=view['trajectory'][0]['lookat'],
+                                        up=view['trajectory'][0]['up'],
+                                        point_show_normal=False)
+    
     # ------------------------------------------
-    # Visualization
+    # Text to Speech
     # ------------------------------------------
 
-    # Create a list of entities to draw
-    p.inliers.paint_uniform_color([0,1,1])
-    entities = []
+    characteristic_list = ['length', 'width', 'height']
+    adjective_list = ['long', 'wide', 'tall']
 
-    frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
-    entities.append(frame)
-
-    # Draw bbox
-    bbox_to_draw = o3d.geometry.LineSet.create_from_axis_aligned_bounding_box(p.bbox)
-    entities.append(bbox_to_draw)
-
-    # Draw objects
+    info_text = Fore.GREEN + '\nThis room has ' + Fore.RED + str(len(objects)) + Style.RESET_ALL + Fore.GREEN + ' objects on the table.\n' + Style.RESET_ALL
+    info_speech ='This room has ' + str(len(objects)) + ' objects on the table. '
+    
     for object_idx, object in enumerate(objects):
-        entities.append(object['points'])
+        if object_idx == 0:
+            characteristic_number = random.randint(0, len(characteristic_list)-1)
+            text_to_add = Fore.GREEN + 'Object number ' + Fore.RED + '1 ' + Style.RESET_ALL + Fore.GREEN + 'is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
+            speech_to_add = 'Object number 1 is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
+            info_text = info_text + text_to_add
+            info_speech = info_speech + speech_to_add
+        elif object_idx == len(objects)-1 and object_idx != 0:
+            characteristic_number = random.randint(0, len(characteristic_list)-1)
+            text_to_add = Fore.GREEN + ' and object number ' + Fore.RED + str(len(objects)) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL + Fore.GREEN + '.\n' + Style.RESET_ALL
+            speech_to_add = ' and object number ' + str(len(objects)) + ' is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number] + '.'
+            info_text = info_text + text_to_add
+            info_speech = info_speech + speech_to_add
+        else:
+            characteristic_number = random.randint(0, len(characteristic_list)-1)
+            text_to_add = Fore.GREEN + ', object number ' + Fore.RED + str(object_idx+1) + Style.RESET_ALL + Fore.GREEN + ' is ' + Style.RESET_ALL + Fore.RED + str(round(object.get(characteristic_list[characteristic_number])*100)) + 'cm ' + adjective_list[characteristic_number] + Style.RESET_ALL
+            speech_to_add = ', object number ' + str(object_idx+1) + ' is ' + str(round(object.get(characteristic_list[characteristic_number])*100)) + ' centimeters ' + adjective_list[characteristic_number]
+            info_text = info_text + text_to_add
+            info_speech = info_speech + speech_to_add
 
-    # Make a more complex open3D window to show object labels on top of 3d
-    app = gui.Application.instance
+    print(str(info_text))
 
-    # Create an open3d app
-    app.initialize() 
-
-    w = app.create_window("Open3D - 3D Text", 1920, 1080)
-    widget3d = gui.SceneWidget()
-    widget3d.scene = rendering.Open3DScene(w.renderer)
-    widget3d.scene.set_background([0,0,0,1])  # Set black background
-    material = rendering.MaterialRecord()
-    material.shader = "defaultUnlit"
-    material.point_size = 2 * w.scaling
-
-    # Draw entities
-    for entity_idx, entity in enumerate(entities):
-        widget3d.scene.add_geometry("Entity " + str(entity_idx), entity, material)
-
-    # Draw labels
-    for object_idx, object in enumerate(objects):
-        label_pos = [object['center'][0], object['center'][1], object['center'][2] + 0.15]
-
-        label_text = object['idx']
-        # if object_idx == cereal_box_object_idx:
-        #     label_text += ' (Cereal Box)'
-
-        label = widget3d.add_3d_label(label_pos, label_text)
-        label.color = gui.Color(object['color'][0], object['color'][1],object['color'][2])
-        
-    bbox = widget3d.scene.bounding_box
-    widget3d.setup_camera(60.0, bbox, bbox.get_center())
-    w.add_child(widget3d)
-
-    app.run()
-
-    o3d.visualization.draw_geometries(entities, 
-                                    zoom=view['trajectory'][0]['zoom'],
-                                    front=view['trajectory'][0]['front'],
-                                    lookat=view['trajectory'][0]['lookat'],
-                                    up=view['trajectory'][0]['up'],
-                                    point_show_normal=False)
-
+    if args['text_to_speech'] == True:
+        speaker = pyttsx3.init()
+        speaker.say(str(info_speech))
+        speaker.runAndWait()
 
 
 if __name__ == "__main__":
