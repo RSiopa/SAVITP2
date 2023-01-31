@@ -28,25 +28,25 @@ def main():
     # Setting up the arguments
     parser = argparse.ArgumentParser(description='Training of the Deep Learning Model')  # arguments
     parser.add_argument('-rt', '--resume_training', action='store_true', default=True, 
-                        help='Continue previous training.\n ')
+                        help='Continue previous training. default=True\n ')
     parser.add_argument('-lr', '--learning_rate', default=0.001, 
-                        help='Define the learning rate.\n ')
+                        help='Define the learning rate. default=0.001\n ')
     parser.add_argument('-mne', '--maximum_num_epochs', type=int, default=1000, 
-                        help='Define the maximum number of epochs.\n ')
+                        help='Define the maximum number of epochs. type=int, default=1000\n ')
     parser.add_argument('-tlt', '--termination_loss_threshold', default=0.001, 
-                        help='Define the termination loss threshold.\n ')
+                        help='Define the termination loss threshold. default=0.001\n ')
     parser.add_argument('-mp', '--model_path', default='model.pkl', 
-                        help='Define the path for the model file.\n ')
+                        help='Define the path for the model file. default=''model.pkl''\n ')
     parser.add_argument('-dp', '--dataset_path', default='Datasets/rgbd-dataset', 
-                        help='Define the path for the dataset.\n ')
+                        help='Define the path for the dataset. default=''Datasets/rgbd-dataset''\n ')
     parser.add_argument('-in', '--image_number', metavar='IMAGE_NUMBER', type=int, choices=range(1, 200000), default=1000, 
-                        help='Define the number of images to use for sampling.\n ')
+                        help='Define the number of images to use for sampling. metavar=''IMAGE_NUMBER'', type=int, choices=range(1, 200000), default=1000\n ')
     parser.add_argument('-ts', '--test_size', default=0.2, 
-                        help='Define the percentage of images used for testing.\n ')
+                        help='Define the percentage of images used for testing. default=0.2\n ')
     parser.add_argument('-tbs', '--train_batch_size', metavar='TRAINING_BATCH_SIZE', type=int, choices=range(25, 10000), default=500, 
-                        help='Define batch size for training.\n ')
+                        help='Define batch size for training. metavar=''TRAINING_BATCH_SIZE'', type=int, choices=range(25, 10000), default=500\n ')
     parser.add_argument('-tesbs', '--test_batch_size', metavar='TESTING_BATCH_SIZE', type=int, choices=range(25, 10000), default=500, 
-                        help='Define batch size for testing.\n ')
+                        help='Define batch size for testing. metavar=''TESTING_BATCH_SIZE'', type=int, choices=range(25, 10000), default=500\n ')
     args = vars(parser.parse_args())
 
     resume_training = args['resume_training']
