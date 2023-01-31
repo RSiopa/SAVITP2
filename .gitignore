@@ -1,5 +1,5 @@
 # Untrack Folders
-SAVI TP2/Scenes
-SAVI TP2/Datasets
+SAVI TP2/Scenes/rgbd-scenes-v2
+SAVI TP2/Datasets/rgbd-dataset
 SAVI TP2/__pycache__
 SAVI TP2/model.pkl
