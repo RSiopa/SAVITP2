@@ -5,8 +5,6 @@ What's B.O.T. purpose? He says what's on the table.
   <img src="https://github.com/RSiopa/SAVITP2/blob/main/docs/butterbot.png?raw=true">
 </p>
 
-![Image](docs/butterbot.png)
-
 O B.O.T. Finder was created to respond to the challenge "Where's my coffee mug?" proposed in the subject Advanced Industrial Vision Systems at the University of Aveiro.
 It consists of a system that, from a given cloud of points, can detect and extract objects, calculate some of their characteristics and in turn classify the detected object, based on a previously trained deep learning classifier. Finally being able to return the name of the objects and some of their characteristics.
 
