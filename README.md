@@ -1,8 +1,9 @@
 
 # B.O.T. Finder
-What's B.O.T. porpouse? To find stuff on tables and tell us what they are.
-
-![Image](docs/butterbot.png)
+What's B.O.T. purpose? He says what's on the table.
+<p align="center">
+  <img src="https://github.com/RSiopa/SAVITP2/blob/main/docs/butterbot.png?raw=true">
+</p>
 
 O B.O.T. Finder was created to respond to the challenge "Where's my coffee mug?" proposed in the subject Advanced Industrial Vision Systems at the University of Aveiro.
 It consists of a system that, from a given cloud of points, can detect and extract objects, calculate some of their characteristics and in turn classify the detected object, based on a previously trained deep learning classifier. Finally being able to return the name of the objects and some of their characteristics.
@@ -11,12 +12,12 @@ The data used for training the classifier and the point clouds can be accessed a
 The dataset for the classifier ([RGB-D Object Dataset](http://rgbd-dataset.cs.washington.edu/dataset/)) contains 300 objects grouped into 51 categories.
 The dataset [RGB-D Scenes Dataset](http://rgbd-dataset.cs.washington.edu/dataset/rgbd-scenes-v2/) contains the 14 scenes with furniture (sofas and tables) and a subset of the objects present from the RGB-D Object Dataset (bowls, caps, cereal boxes, coffee mugs, and soda cans).
 
-### Get Started
+# Get Started
 
-# Model Training
-First, B.O.T. must train his eyes and brain.
-In _/SAVI TP2/Model_ Training you can find the script model_training.py to train B.O.T.
-We already provide a trainned model in the folder _/SAVI TP2/Model_ Training/Best_Model if you wish to use.
+### Model Training
+First, B.O.T. must train his eyes and brain. Use your machine power to train his void head.
+In ```/SAVI TP2/Model Training```  you can find the script model_training.py to train B.O.T.
+We already provide a trainned model in the folder ```/SAVI TP2/Model Training/Best_Model``` if you wish to use.
 
 ![Image](docs/training.png)
 ![Image](docs/traininggraph.png)
@@ -61,11 +62,11 @@ options:
                         Define batch size for testing. metavar=TESTING_BATCH_SIZE, type=int, choices=range(25, 10000), default=500
 ```
 
-# Point Cloud Processing
+### Point Cloud Processing
 
 ![Image](docs/pointCloudTerminal.png)
 
-Calling the _main_projecto.py_ script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
+Going to ```/SAVI TP2/Point Cloud Processing```and calling the ```main_projecto.py``` script will load a point cloud from the dataset, detect, extract and classify the objects in the scene, returning you their name, and dimensions.
 
 ```
 usage: main_projeto.py [-h] [-s SCENE_NUMBER] [-tts] [-v]
@@ -74,17 +75,24 @@ PointCloud Scene Processor used to detect items on top of a table and identify t
 
 options:
   -h, --help            show this help message and exit
+
   -s SCENE_NUMBER, --scene SCENE_NUMBER
                         Choose a scene from 1 to 14. Do not use argument to use a random scene.
+
   -tts, --text_to_speech
                         Use text to speech. default=False
+
   -v, --show_visualization
                         Show visualization windows. default=False
 ```
 
-![Image](preview1.png)
+![Image](docs/preview1.png)
 
-# Autores
+### RGB-D Camera Live Detection
+
+In progress
+
+# Authors
 - [Rafael Siopa](https://github.com/RSiopa)
 - [Gil Viegas](https://github.com/gilviegas)
 - [Emanuel Fonseca](https://github.com/emanuelfonseca99)
