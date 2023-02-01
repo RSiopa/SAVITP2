@@ -27,7 +27,7 @@ def main():
 
     # Setting up the arguments
     parser = argparse.ArgumentParser(description='Training of the Deep Learning Model')  # arguments
-    parser.add_argument('-rt', '--resume_training', action='store_true', default=True, 
+    parser.add_argument('-rt', '--resume_training', action='store_false', default=True, 
                         help='Continue previous training. default=True\n ')
     parser.add_argument('-lr', '--learning_rate', default=0.001, 
                         help='Define the learning rate. default=0.001\n ')
